@@ -4,7 +4,7 @@ import React from 'react'
 export default function StartScreen() {
   return (
     <View>
-      <Text>startScreen</Text>
+      <Text>startScreennn</Text>
     </View>
   )
 }
