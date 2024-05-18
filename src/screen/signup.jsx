@@ -1,7 +1,7 @@
-import { Button, Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import React from 'react'
 
-export default function LoginPage() {
+const signup = () => {
   return (
     <View className="pt-8 w-full h-ful">
     <View className="w-full h-10 bg-slate-200 flex flex-row">
@@ -55,6 +55,8 @@ export default function LoginPage() {
 
     </View>
   </View>
-    
-  );
+
+  )
 }
+
+export default signup
