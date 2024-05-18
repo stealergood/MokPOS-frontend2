@@ -11,42 +11,50 @@ export default function LoginPage() {
       </View>
 
       <View className=" bg-gray-400 w-full flex justify-center items-center">
-        <Text className="text-blue-600">Log in</Text>
+        <Text className="text-blue-600">Sign Up</Text>
       </View>
     </View>
 
     <View className="w-full h-full flex p-6">
       <View>
-        <View className=" mt-36">
-          <Text className=" mb-1">Email or Phone Number</Text>
+        <View className="">
+          <Text className=" mb-1">Store Name</Text>
           <TextInput className=" w-full h-10 bg-slate-400  rounded-full pl-5">
-            Email or Phone Number
+            Store Name
           </TextInput>
         </View>
 
-        <View className=" mt-6">
+        <View className=" mt-4">
+          <Text className=" mb-1">Email</Text>
+          <TextInput className=" w-full h-10 bg-slate-400  rounded-full pl-5">
+          Email or Phone Number
+          </TextInput>
+
+          <View className="mt-4">
+          <Text className=" mb-1">Phone Number</Text>
+          <TextInput className=" w-full h-10 bg-slate-400  rounded-full pl-5">
+            085156239078
+          </TextInput>
+          </View>
+        </View>
+
+        <View className="mt-4">
           <Text className=" mb-1">Password</Text>
           <TextInput className=" w-full h-10 bg-slate-400  rounded-full pl-5">
-            At least 8 characters
+          At least 8 characters
           </TextInput>
-        </View>
+          </View>
+
       </View>
 
       <View className=" mt-7 flex flex-col items-center">
-
-        <View className=" w-full flex  items-end">
-          <Text className="mb-1"> Forgot Password?</Text>
-        </View>
-
         <Pressable className="w-full bg-blue-600 flex items-center h-9 rounded-full justify-center">
-          <Text>Login</Text>
+          <Text>Sign Up</Text>
         </Pressable>
-
-        <Text className=" mt-1">Don't have an account? Sign up</Text>
       </View>
 
     </View>
   </View>
-
-  )
+    
+  );
 }
