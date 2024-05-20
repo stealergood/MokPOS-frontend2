@@ -9,7 +9,7 @@ export default function App() {
           <Text>Logo</Text>
         </View>
         <View className=" bg-gray-400 w-full flex justify-center items-center">
-          <Text>Login</Text>
+          <Text>loggg</Text>
         </View>
       </View>
 
