@@ -16,7 +16,7 @@ const login = () => {
 
       <View className="w-full h-full flex p-6">
         <View>
-          <View className=" mt-36">
+          <View className=" mt-36"  >
             <Text className=" mb-1">Email or Phone Number</Text>
             <TextInput className=" w-full h-10 bg-slate-400  rounded-full pl-5">
               Email or Phone Number

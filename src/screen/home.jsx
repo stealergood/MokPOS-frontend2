@@ -5,11 +5,11 @@ const home = () => {
   return (
     <View className="pt-8 w-full h-ful mt-10">
     <View className="w-full h-20 bg-slate-200 flex flex-row justify-center">
-      <Image source={require("./assets/MokPOS.png")} />
+      <Image source={require("../../assets/MokPOS.png")} />
     </View>
 
     <View className="w-full h-[400px] bg-slate-200 flex flex-row justify-center items-center">
-      <Image source={require("./assets/Hero.png")} />
+      <Image source={require("../../assets/Hero.png")} />
     </View>
 
     <View className="w-full h-20 bg-slate-200 flex flex-row justify-center">
