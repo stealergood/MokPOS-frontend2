@@ -3,8 +3,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        blues : "#1A72DD"
-      }
+        blues : "#1A72DD",
+        latar: "#D1D1D1"
+      },
     },
   },
   plugins: [],
