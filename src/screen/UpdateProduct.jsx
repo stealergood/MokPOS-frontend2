@@ -2,7 +2,7 @@ import { View, Text, Pressable, TextInput } from "react-native";
 import { Icon } from "react-native-elements";
 import React from "react";
 
-const AddProduct = () => {
+const UpdateProduct = () => {
   return (
     <View className="w-full h-ful pt-5">
       <View className="w-full h-16 flex flex-row">
@@ -17,7 +17,7 @@ const AddProduct = () => {
 
         <View className="w-4/5 flex justify-center items-center">
           <Text className="mr-16 text-blue-600 font-semibold text-2xl">
-            Add Product
+            Update Product
           </Text>
         </View>
       </View>
@@ -65,13 +65,17 @@ const AddProduct = () => {
           </View>
         </View>
       </View>
-      <View className=" w-full h-52 flex  justify-center items-center">
+      <View className=" w-full h-52 flex  justify-center items-center gap-2 ">
         <Pressable className="h-14 w-5/6  mt-5 flex justify-center items-center bg-[#0D62CA] rounded px-5">
-          <Text className="text-white">Add New product</Text>
+          <Text className="text-white">Update</Text>
+        </Pressable>
+        <Pressable className=" flex  flex-row justify-between items-center">
+          <Icon name="trash" type="evilicon" color={"red"} />
+          <Text className=" text-red-500">Delete Product</Text>
         </Pressable>
       </View>
     </View>
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

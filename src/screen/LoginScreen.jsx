@@ -9,7 +9,7 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = () => {
     console.log('email', email);
     console.log('password', password);
-    navigation.navigate('MainMenu');
+    navigation.navigate('AddProduct');
   }
 
   return (
