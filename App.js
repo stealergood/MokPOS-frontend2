@@ -24,6 +24,5 @@ export default function App() {
         <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
-    // <AddProduct />
   );
 }
