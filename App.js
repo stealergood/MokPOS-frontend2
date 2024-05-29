@@ -13,6 +13,7 @@ import CategoryList from "./src/screen/CategoryList";
 import AddCategory from "./src/screen/AddCategory";
 import UpdateCategory from "./src/screen/UpdateCategory";
 import PaymentMethod from "./src/screen/PaymentMethod";
+import ProductList from "./src/screen/ProductList";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,13 +24,14 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
         <Stack.Screen name="Signup" component={Signup} options={{headerShown: false}}/>
-        <Stack.Screen name="MainMenu" component={MainScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="MainScreen" component={MainScreen} options={{headerShown: false}}/>
         <Stack.Screen name="AddProduct" component={AddProduct} options={{headerShown: false}}/>
         <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{headerShown: false}}/>
         <Stack.Screen name="CategoryList" component={CategoryList} options={{headerShown: false}}/>
         <Stack.Screen name="AddCategory" component={AddCategory} options={{headerShown: false}}/>
         <Stack.Screen name="UpdateCategory" component={UpdateCategory} options={{headerShown: false}}/>
         <Stack.Screen name="PaymentMethod" component={PaymentMethod} options={{headerShown: false}}/>
+        <Stack.Screen name="ProductList" component={ProductList} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

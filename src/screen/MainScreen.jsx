@@ -5,19 +5,25 @@ import {
   Pressable,
   Animated,
   Image,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import React, { useState, useRef } from "react";
+import { SearchBar } from "react-native-elements";
 
 const MainScreen = ({ navigation }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isGridVisible, setIsGridVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(false);
   const slideAnim = useRef(new Animated.Value(-250)).current; // Initial position for the side menu
 
   const toggleGrid = () => {
     setIsGridVisible(!isGridVisible);
-  }
+  };
+
+  const SearchComponent = () => {
+    setSearchTerm(!searchTerm);
+  };
 
   const toggleMenu = () => {
     if (isMenuVisible) {
@@ -65,21 +71,56 @@ const MainScreen = ({ navigation }) => {
           </View>
         </View>
         <View className="w-full h-16 flex flex-row">
-          <Pressable className="w-4/6 h-full flex flex-row items-center px-5 gap-x-1 border-t-2 border-b-2 border-slate-200">
-            <Text>All Product</Text>
-            <Icon name="down" type="antdesign" size={13}/>
+          <View className="w-4/6 h-full  border-t-2 border-b-2 border-slate-200">
+            <Pressable className="w-4/6 h-full flex flex-row items-center px-5 gap-x-1 border-t-2 border-b-2 border-slate-200">
+              <Text>All Product</Text>
+              <Icon name="down" type="antdesign" size={13} />
+            </Pressable>
+          </View>
+          <Pressable
+            onPress={SearchComponent}
+            className="w-1/6 flex justify-center items-center border-t-2 border-b-2 border-l-2 border-slate-200"
+          >
+            <Icon name="search1" type="antdesign" size={20} />
           </Pressable>
-          <Pressable className="w-1/6 flex justify-center items-center border-t-2 border-b-2 border-l-2 border-slate-200">
-            <Icon name="search1" type="antdesign" size={20}/>
-          </Pressable>
-          <Pressable className="w-1/6 flex justify-center items-center border-t-2 border-b-2 border-l-2 border-slate-200">
-            <Icon name="list-bullet" type="foundation"/>
+          <Pressable
+            onPress={toggleGrid}
+            className="w-1/6 flex justify-center items-center border-t-2 border-b-2 border-l-2 border-slate-200"
+          >
+            <Icon name="list-bullet" type="foundation" />
           </Pressable>
         </View>
+        {searchTerm && (
+          <View className="w-full h-16">
+            <SearchBar
+              placeholder="Search name product..."
+              containerStyle={{
+                backgroundColor: "transparent",
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+                shadowColor: "#ffbf00",
+                shadowOpacity: 0.1,
+              }}
+              inputContainerStyle={{
+                backgroundColor: "#e1e1e1",
+                borderRadius: 10,
+                flexDirection: "row-reverse", // Move icon to the right
+              }}
+              searchIcon={{ color: "#2A3256" }}
+            />
+          </View>
+        )}
+
+
+
         <ScrollView className="w-full h-full relative py-5 bg-latar">
           <View className="w-full h-[100%] bg-slate-600">
             {isGridVisible ? (
-              <View></View>
+              <View className="w-full h-[1000px] bg-black grid grid-flow-row auto-rows-max">
+                <View className="w-[100px] h-52 bg-blue-600 rounded-2xl"></View>
+                <View className="w-[100px] h-52 bg-blue-600 rounded-2xl"></View>
+                <View className="w-[100px] h-52 bg-blue-600 rounded-2xl"></View>
+              </View>
             ) : (
               <View className="w-full h-[1000px] bg-black grid grid-flow-row auto-rows-max">
                 <View className="w-[100px] h-52 bg-white rounded-2xl"></View>
@@ -109,7 +150,12 @@ const MainScreen = ({ navigation }) => {
                 </Text>
               </View>
               <View className="px-4 py-7 gap-y-5">
-                <Pressable className="flex flex-row gap-x-2 items-center">
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("");
+                  }}
+                  className="flex flex-row gap-x-2 items-center"
+                >
                   <Icon
                     name="cash-register"
                     type="material-community"

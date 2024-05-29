@@ -2,7 +2,7 @@ import {   Pressable,SafeAreaView,View, Text } from 'react-native'
 import React from 'react'
 import { SearchBar } from "react-native-elements";
 
-const productList = () => {
+const ProductList = () => {
   return (
     <SafeAreaView className="w-full h-full">
       <View className="w-full h-28 flex flex-row">
@@ -59,4 +59,4 @@ const productList = () => {
   )
 }
 
-export default productList
+export default ProductList
