@@ -5,13 +5,19 @@ import {
   Pressable,
   Animated,
   Image,
+  ScrollView
 } from "react-native";
 import { Icon } from "react-native-elements";
 import React, { useState, useRef } from "react";
 
 const MainScreen = ({ navigation }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [isGridVisible, setIsGridVisible] = useState(false);
   const slideAnim = useRef(new Animated.Value(-250)).current; // Initial position for the side menu
+
+  const toggleGrid = () => {
+    setIsGridVisible(!isGridVisible);
+  }
 
   const toggleMenu = () => {
     if (isMenuVisible) {
@@ -43,7 +49,7 @@ const MainScreen = ({ navigation }) => {
   return (
     <SafeAreaView>
       <Pressable onPress={closeMenu} className="w-full h-full pt-5">
-        <View className="w-full h-16 flex flex-row border-b-2 border-slate-200">
+        <View className="w-full h-16 flex flex-row">
           <View className="w-1/5 flex justify-center items-center">
             <Pressable
               className="h-10 w-10 rounded-lg flex justify-center items-center"
@@ -58,7 +64,32 @@ const MainScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
-        <View className="w-full h-full bg-latar"></View>
+        <View className="w-full h-16 flex flex-row">
+          <Pressable className="w-4/6 h-full flex flex-row items-center px-5 gap-x-1 border-t-2 border-b-2 border-slate-200">
+            <Text>All Product</Text>
+            <Icon name="down" type="antdesign" size={13}/>
+          </Pressable>
+          <Pressable className="w-1/6 flex justify-center items-center border-t-2 border-b-2 border-l-2 border-slate-200">
+            <Icon name="search1" type="antdesign" size={20}/>
+          </Pressable>
+          <Pressable className="w-1/6 flex justify-center items-center border-t-2 border-b-2 border-l-2 border-slate-200">
+            <Icon name="list-bullet" type="foundation"/>
+          </Pressable>
+        </View>
+        <ScrollView className="w-full h-full relative py-5 bg-latar">
+          <View className="w-full h-[100%] bg-slate-600">
+            {isGridVisible ? (
+              <View></View>
+            ) : (
+              <View className="w-full h-[1000px] bg-black grid grid-flow-row auto-rows-max">
+                <View className="w-[100px] h-52 bg-white rounded-2xl"></View>
+                <View className="w-[100px] h-52 bg-white rounded-2xl"></View>
+                <View className="w-[100px] h-52 bg-white rounded-2xl"></View>
+              </View>
+            )}
+          </View>
+          {/* <Pressable className="w-full h-16 absolute bg-slate-500 "></Pressable> */}
+        </ScrollView>
       </Pressable>
 
       {isMenuVisible && (
