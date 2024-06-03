@@ -6,6 +6,7 @@ import {
   Animated,
   Image,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import React, { useState, useRef } from "react";
@@ -16,6 +17,17 @@ const MainScreen = ({ navigation }) => {
   const [isGridVisible, setIsGridVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState(false);
   const slideAnim = useRef(new Animated.Value(-250)).current; // Initial position for the side menu
+
+  const data = [
+    { id: "1", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
+    { id: "2", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
+    { id: "3", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
+    { id: "4", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
+    { id: "5", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
+    { id: "6", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
+    { id: "7", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
+    { id: "8", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
+  ];
 
   const toggleGrid = () => {
     setIsGridVisible(!isGridVisible);
@@ -52,8 +64,12 @@ const MainScreen = ({ navigation }) => {
     });
   };
 
+  const renderItem = ({ item }) => (
+    <View className={`${item.style} bg-white rounded-2xl`}></View>
+  );
+
   return (
-    <SafeAreaView>
+    <SafeAreaView flex={1}>
       <Pressable onPress={closeMenu} className="w-full h-full pt-5">
         <View className="w-full h-16 flex flex-row">
           <View className="w-1/5 flex justify-center items-center">
@@ -83,6 +99,7 @@ const MainScreen = ({ navigation }) => {
           >
             <Icon name="search1" type="antdesign" size={20} />
           </Pressable>
+
           <Pressable
             onPress={toggleGrid}
             className="w-1/6 flex justify-center items-center border-t-2 border-b-2 border-l-2 border-slate-200"
@@ -106,31 +123,22 @@ const MainScreen = ({ navigation }) => {
                 borderRadius: 10,
                 flexDirection: "row-reverse", // Move icon to the right
               }}
-              searchIcon={{ color: "#2A3256" }}
+              searchIcon={false}
+              clearIcon={false}
             />
           </View>
         )}
 
-
-
-        <ScrollView className="w-full h-full relative py-5 bg-latar">
-          <View className="w-full h-[100%] bg-slate-600">
-            {isGridVisible ? (
-              <View className="w-full h-[1000px] bg-black grid grid-flow-row auto-rows-max">
-                <View className="w-[100px] h-52 bg-blue-600 rounded-2xl"></View>
-                <View className="w-[100px] h-52 bg-blue-600 rounded-2xl"></View>
-                <View className="w-[100px] h-52 bg-blue-600 rounded-2xl"></View>
-              </View>
-            ) : (
-              <View className="w-full h-[1000px] bg-black grid grid-flow-row auto-rows-max">
-                <View className="w-[100px] h-52 bg-white rounded-2xl"></View>
-                <View className="w-[100px] h-52 bg-white rounded-2xl"></View>
-                <View className="w-[100px] h-52 bg-white rounded-2xl"></View>
-              </View>
-            )}
-          </View>
-          {/* <Pressable className="w-full h-16 absolute bg-slate-500 "></Pressable> */}
-        </ScrollView>
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingHorizontal: isGridVisible ? 2 : 0, paddingBottom: 5 }}
+          numColumns={isGridVisible ? 1 : 2}
+          columnWrapperStyle={!isGridVisible && { justifyContent: 'space-between' }}
+          style={{ width: '100%', height: '100%', backgroundColor: '#D1D1D1', paddingTop: 5 }}
+          key={isGridVisible ? 'grid' : 'list'}
+        />
       </Pressable>
 
       {isMenuVisible && (
