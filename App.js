@@ -1,5 +1,4 @@
 import { SafeAreaView, Pressable, Text, TextInput, View } from "react-native";
-import { Icon } from "react-native-elements";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -14,6 +13,7 @@ import AddCategory from "./src/screen/AddCategory";
 import UpdateCategory from "./src/screen/UpdateCategory";
 import PaymentMethod from "./src/screen/PaymentMethod";
 import ProductList from "./src/screen/ProductList";
+import OrderDetail from "./src/screen/OrderDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +32,10 @@ export default function App() {
         <Stack.Screen name="UpdateCategory" component={UpdateCategory} options={{headerShown: false}}/>
         <Stack.Screen name="PaymentMethod" component={PaymentMethod} options={{headerShown: false}}/>
         <Stack.Screen name="ProductList" component={ProductList} options={{headerShown: false}}/>
+        <Stack.Screen name="OrderDetail" component={OrderDetail} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
+
+
   );
 }
