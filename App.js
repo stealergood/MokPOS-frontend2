@@ -14,6 +14,7 @@ import UpdateCategory from "./src/screen/UpdateCategory";
 import PaymentMethod from "./src/screen/PaymentMethod";
 import ProductList from "./src/screen/ProductList";
 import OrderDetail from "./src/screen/OrderDetail";
+import SuccesScreen from "./src/screen/SuccesScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ export default function App() {
         <Stack.Screen name="PaymentMethod" component={PaymentMethod} options={{headerShown: false}}/>
         <Stack.Screen name="ProductList" component={ProductList} options={{headerShown: false}}/>
         <Stack.Screen name="OrderDetail" component={OrderDetail} options={{headerShown: false}}/>
+        <Stack.Screen name="SuccesScreen" component={SuccesScreen} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
 
