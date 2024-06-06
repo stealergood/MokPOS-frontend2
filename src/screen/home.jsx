@@ -25,7 +25,7 @@ const Home = ({ navigation }) => {
 
         <Pressable 
           className="w-5/6 h-14 bg-white flex items-center rounded-2xl justify-center border border-blues"
-          onPress={() => navigation.navigate('SuccesScreen')}
+          onPress={() => navigation.navigate('Login')}
           >
           <Text className="text-blues font-semibold">Log in</Text>
         </Pressable>

@@ -1,42 +1,42 @@
-import { SafeAreaView, Pressable, Text, TextInput, View } from "react-native";
-
-import { API_URL } from "../constant/api";
+import { SafeAreaView, Pressable, Text, TextInput, View, ActivityIndicator } from "react-native";
+import { API_URL } from "../constant/Api";
 import { Icon } from "react-native-elements";
 import React, { useState } from "react";
+
+const fetchSignup = async (store_name, email, phone, password) => {
+  try {
+    const response = await fetch(`${API_URL}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        store_name,
+        email,
+        phone,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const Signup = ({ navigation }) => {
   const [store_name, onChangestore_name] = useState("");
   const [email, onChangeEmail] = useState("");
   const [phone, onChangephone] = useState("");
   const [password, onChangePassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async () => {
-    // const data = JSON.stringify({
-    //   store_name,
-    //   email,
-    //   phone,
-    //   password,
-    // });
-    // console.log(data);
-    try {
-      const response = await fetch(`${API_URL}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          store_name,
-          email,
-          phone,
-          password,
-        }),
-      });
-
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+    setLoading(true);
+    await fetchSignup(store_name, email, phone, password);
+    setLoading(false);
+    navigation.navigate("Login");
   }
 
   return (
@@ -105,8 +105,14 @@ const Signup = ({ navigation }) => {
           <Pressable
             className="w-full bg-blues flex items-center h-14 rounded-2xl justify-center"
             onPress={handleSignup}
+            disabled={loading}
           >
-            <Text className="text-white text-lg font-semibold">Sign Up</Text>
+            {/* <Text className="text-white text-lg font-semibold">Sign Up</Text> */}
+            {loading ? (
+              <ActivityIndicator size="large" color="#fff" />
+            ) : (
+              <Text className="text-white text-lg font-semibold">Sign Up</Text>
+            )}
           </Pressable>
         </View>
       </View>

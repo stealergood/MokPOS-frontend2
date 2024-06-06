@@ -1,15 +1,48 @@
-import { SafeAreaView, Pressable, Text, TextInput, View } from "react-native";
+import { SafeAreaView, Pressable, Text, TextInput, View, ActivityIndicator } from "react-native";
+import { API_URL } from "../constant/Api";
+import { useAuth } from "../helpers/AuthContext";
 import { Icon } from "react-native-elements";
-import React from 'react'
+import React, { useState } from 'react'
+
+const fetchLogin = async (email, password) => {
+  try {
+    const response = await fetch(`${API_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text();
+      throw new Error(`Expected JSON, got ${contentType}: ${text}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("Error:", error.message);
+  }
+}
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const { signIn } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
-    console.log('email', email);
-    console.log('password', password);
-    navigation.navigate('MainScreen');
+    setLoading(true);
+    fetchLogin(email, password)
+      .then((data) => {
+        setLoading(false);
+        signIn(data.data.accessToken);
+      });
   }
 
   return (
@@ -60,11 +93,11 @@ const LoginScreen = ({ navigation }) => {
             className="w-full bg-blues flex items-center h-14 rounded-2xl justify-center"
             onPress={handleLogin}
             >
-            <Text className="text-white text-lg font-semibold">Login</Text>
+            {loading ? <ActivityIndicator color="#ffff" /> : <Text className="text-white font-semibold">Log in</Text>}
           </Pressable>
           <View className="flex flex-row gap-x-1 mt-2">
             <Text className="">Don't have an account?</Text>
-            <Pressable>
+            <Pressable onPress={() => navigation.navigate("Signup")}>
               <Text className="text-blue-600 font-semibold">Sign Up</Text>
             </Pressable>
           </View>

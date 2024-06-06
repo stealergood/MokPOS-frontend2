@@ -11,8 +11,10 @@ import {
 import { Icon } from "react-native-elements";
 import React, { useState, useRef } from "react";
 import { SearchBar } from "react-native-elements";
+import { useAuth } from "../helpers/AuthContext";
 
 const MainScreen = ({ navigation }) => {
+  const { signOut } = useAuth();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isGridVisible, setIsGridVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState(false);
@@ -183,6 +185,20 @@ const MainScreen = ({ navigation }) => {
                   />
                   <Text className="text-white text-lg font-semibold">
                     Manage Store
+                  </Text>
+                </Pressable>
+                <Pressable 
+                className="flex flex-row gap-x-2 items-center"
+                onPress={() => {signOut()}}
+                >
+                  <Icon
+                    name="storefront-outline"
+                    type="ionicon"
+                    color={"#ffff"}
+                    size={33}
+                  />
+                  <Text className="text-white text-lg font-semibold">
+                    Logout
                   </Text>
                 </Pressable>
               </View>
