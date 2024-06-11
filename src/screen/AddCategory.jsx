@@ -38,9 +38,12 @@ const AddCategory = ({ navigation }) => {
     setLoading(true);
     fetchAddCategory(category_name, user_id, token)
       .then((data) => {
+        if (data.status === "error"){
+          console.log("error")
+        }
         setLoading(false);
-        console.log(data);
-        // navigation.navigate("CategoryList");
+
+        navigation.navigate("CategoryList");
       })
       .catch((error) => {
         console.log(error);
