@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { useAuth } from "../helpers/AuthContext";
 
 const fetchAddCategory = async (category_name, user_id, token) => {
-  // console.log(JSON.stringify({category_name, user_id}));
   try {
     const response = await fetch(`${API_URL}/category`, {
       method: "POST",
@@ -28,36 +27,53 @@ const fetchAddCategory = async (category_name, user_id, token) => {
 };
 
 const AddCategory = ({ navigation }) => {
+  const [category_name, setCategoryName] = useState("");
+  const [alert, setAlert] = useState(false);
+  const [alertMesaaage, setAlertMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const { token, userID } = useAuth();
   const user_id = userID;
-  const [category_name, setCategoryName] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const Addcategory = async() => {
-
+  const categoryHandler = async() => {
     setLoading(true);
+
+    if (category_name === "") {
+      setAlertMessage("Category Name is required");
+      setAlert(true);
+      setLoading(false);
+      return;
+    } else {
+      setAlert(false);
+    }
+
+    setCategoryName("");
+
     fetchAddCategory(category_name, user_id, token)
       .then((data) => {
-        if (data.status === "error"){
-          console.log("error")
+        if (data.message === "Category already exists") {
+          setAlertMessage("Category already exist");
+          setAlert(true);
+          setLoading(false);
+          return;
         }
+        setAlert(false);
         setLoading(false);
-
         navigation.navigate("CategoryList");
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   return (
-    <View className="w-full h-ful pt-5">
+    <View className="w-full h-full pt-5 relative">
       <View className="w-full h-16 flex flex-row">
         <View className="w-1/5 flex justify-center items-center">
           <Pressable
-            className="bg-blues h-10 w-10 rounded-lg flex justify-center items-center"
-            // onPress={() => navigation.navigate("Home")}
+            className=" h-10 w-10 rounded-lg flex justify-center items-center"
+            onPress={() => navigation.navigate("CategoryList")}
           >
-            <Icon name="chevron-left" color="#ffff" size={34} />
+            <Icon name="chevron-left" color="#1A72DD" size={34} />
           </Pressable>
         </View>
 
@@ -77,12 +93,14 @@ const AddCategory = ({ navigation }) => {
             onChangeText={(text) => setCategoryName(text)}
             value={category_name}
           />
+          {alert && <Text className="text-red-500">{alertMesaaage}</Text>}
         </View>
       </View>
-      <View className=" w-full h-full flex  justify-center items-center gap-2 ">
+      <View className=" w-full h-fit absolute bottom-8 flex  justify-center items-center gap-2 ">
         <Pressable
           className="h-14 w-5/6  mt-5 flex justify-center items-center bg-[#0D62CA] rounded px-5"
-          onPress={Addcategory}
+          onPress={categoryHandler}
+          disabled={loading}
         >
           {loading ? <ActivityIndicator color="#ffff" /> : <Text className="text-white">Add Category</Text>}
         </Pressable>
