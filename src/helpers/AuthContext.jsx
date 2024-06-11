@@ -9,6 +9,17 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const loadUserID = async () => {
+      try {
+        const savedUserID = await AsyncStorage.getItem('user_id');
+        if (savedUserID) {
+          setUserID(savedUserID);
+        }
+      } catch (error) {
+        console.error('Failed to load user_id', error);
+      }
+    };
+
     const loadToken = async () => {
       try {
         const savedToken = await AsyncStorage.getItem('token');
@@ -22,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
+    loadUserID();
     loadToken();
   }, []);
 
@@ -46,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, signIn, signOut, isLoading }}>
+    <AuthContext.Provider value={{ token, signIn, signOut, isLoading, userID }}>
       {children}
     </AuthContext.Provider>
   );

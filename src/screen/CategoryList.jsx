@@ -27,7 +27,10 @@ const CategoryList = () => {
         <Text className="font-semibold mt-5">Beverage</Text>
       </View>
       <View className="w-full h-full  flex justify-center items-center">
-        <Pressable className="h-14 w-5/6  mt-5 flex justify-center items-center bg-[#0D62CA] rounded px-5">
+        <Pressable 
+        className="h-14 w-5/6  mt-5 flex justify-center items-center bg-[#0D62CA] rounded px-5"
+        
+        >
           <Text className="text-white">Add Category</Text>
         </Pressable>
       </View>

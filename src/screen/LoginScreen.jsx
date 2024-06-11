@@ -32,8 +32,8 @@ const fetchLogin = async (email, password) => {
 
 const LoginScreen = ({ navigation }) => {
   const { signIn } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('ncstealer@gmail.com');
+  const [password, setPassword] = useState('deni123');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
@@ -41,9 +41,9 @@ const LoginScreen = ({ navigation }) => {
     fetchLogin(email, password)
       .then((data) => {
         setLoading(false);
+        console.log(data.data.user_id)
         signIn(data.data.accessToken, data.data.user_id);
       });
-    navigation.navigate("AddCategory");
   }
 
   return (

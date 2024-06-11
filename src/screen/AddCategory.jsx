@@ -1,8 +1,51 @@
-import { View, Text, Pressable, TextInput } from "react-native";
+import { View, Text, Pressable, TextInput, ActivityIndicator } from "react-native";
 import { Icon } from "react-native-elements";
-import React from "react";
+import { API_URL } from "../constant/Api";
+import React, { useState } from "react";
+import { useAuth } from "../helpers/AuthContext";
 
-const AddCategory = () => {
+const fetchAddCategory = async (category_name, user_id, token) => {
+  // console.log(JSON.stringify({category_name, user_id}));
+  try {
+    const response = await fetch(`${API_URL}/category`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        user_id,
+        category_name,
+      }),
+    });
+
+    const data = await response.json();
+    return data;
+    // return response;
+  } catch (error) {
+    console.log("Error:");
+  }
+};
+
+const AddCategory = ({ navigation }) => {
+  const { token, userID } = useAuth();
+  const user_id = userID;
+  const [category_name, setCategoryName] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const Addcategory = async() => {
+
+    setLoading(true);
+    fetchAddCategory(category_name, user_id, token)
+      .then((data) => {
+        setLoading(false);
+        console.log(data);
+        // navigation.navigate("CategoryList");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <View className="w-full h-ful pt-5">
       <View className="w-full h-16 flex flex-row">
@@ -28,16 +71,21 @@ const AddCategory = () => {
           <TextInput
             className="w-full mt-2 h-14 bg-slate-200 rounded-2xl pl-5"
             placeholder="Steak"
+            onChangeText={(text) => setCategoryName(text)}
+            value={category_name}
           />
         </View>
       </View>
       <View className=" w-full h-full flex  justify-center items-center gap-2 ">
-        <Pressable className="h-14 w-5/6  mt-5 flex justify-center items-center bg-[#0D62CA] rounded px-5">
-          <Text className="text-white">Add Category</Text>
+        <Pressable
+          className="h-14 w-5/6  mt-5 flex justify-center items-center bg-[#0D62CA] rounded px-5"
+          onPress={Addcategory}
+        >
+          {loading ? <ActivityIndicator color="#ffff" /> : <Text className="text-white">Add Category</Text>}
         </Pressable>
-        </View>
+      </View>
     </View>
-  )
-}
+  );
+};
 
-export default AddCategory
+export default AddCategory;

@@ -24,11 +24,11 @@ const AppNavigator = () => {
     <Stack.Navigator>
       {token ? (
         <>
+          <Stack.Screen name="AddCategory" component={AddCategory} options={{ headerShown: false }} />
           <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }} />
           <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} />
           <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} />
           <Stack.Screen name="CategoryList" component={CategoryList} options={{ headerShown: false }} />
-          <Stack.Screen name="AddCategory" component={AddCategory} options={{ headerShown: false }} />
           <Stack.Screen name="UpdateCategory" component={UpdateCategory} options={{ headerShown: false }} />
           <Stack.Screen name="PaymentMethod" component={PaymentMethod} options={{ headerShown: false }} />
           <Stack.Screen name="ProductList" component={ProductList} options={{ headerShown: false }} />
