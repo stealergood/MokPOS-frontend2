@@ -24,7 +24,6 @@ const AppNavigator = () => {
     <Stack.Navigator>
       {token ? (
         <>
-          <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }} />
           <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} />
           <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} />
           <Stack.Screen name="CategoryList" component={CategoryList} options={{ headerShown: false }} />
@@ -37,6 +36,7 @@ const AppNavigator = () => {
         </>
       ) : (
         <>
+          <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />

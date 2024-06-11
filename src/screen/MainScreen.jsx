@@ -5,7 +5,6 @@ import {
   Pressable,
   Animated,
   Image,
-  ScrollView,
   FlatList,
 } from "react-native";
 import { Icon } from "react-native-elements";
@@ -21,14 +20,10 @@ const MainScreen = ({ navigation }) => {
   const slideAnim = useRef(new Animated.Value(-250)).current; // Initial position for the side menu
 
   const data = [
-    { id: "1", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
-    { id: "2", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
-    { id: "3", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
-    { id: "4", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
-    { id: "5", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
-    { id: "6", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
-    { id: "7", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
-    { id: "8", style: isGridVisible ? "w-full h-40 mb-2" : "w-[45%] h-52 m-2" },
+    { id: "1", name: "Avocado Coffe", price: 2.3 },
+    { id: "2", name: "Cappucino Coffe", price: 2.3 },
+    { id: "3", name: "Americano Coffe", price: 2 },
+    { id: "4", name: "Banana Coffe", price: 2.3 },
   ];
 
   const toggleGrid = () => {
@@ -67,12 +62,35 @@ const MainScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <View className={`${item.style} bg-white rounded-2xl`}></View>
+    <View className={`${isGridVisible ? "w-[95%] h-24 m-2 self-center flex flex-row" : "w-[45%] h-52 m-2 flex flex-col"} bg-white rounded-2xl`}>
+      <View className={`${isGridVisible ? "h-full w-32 bg-blue-300 rounded-2xl" : "w-full h-28 bg-blue-300 rounded-2xl"}`}></View>
+      <View className={`${isGridVisible ? "w-40 h-full rounded-2xl p-3" : "w-full h-16 rounded-2xl px-3 py-1"}`}>
+        <Text className="text-lg font-semibold text-wrap">{item.name}</Text>
+        {isGridVisible ?
+          <Text className="text-lg font-medium text-blues">${item.price}</Text>
+        :
+          <View className="w-full h-full flex-row justify-between items-center">
+            <Text className="text-lg font-medium text-blues">${item.price}</Text>
+            <Pressable className="w-8 h-8 bg-blue-600 rounded-lg justify-center">
+              <Icon name="plus" type="entypo" color="#ffff" size={25} />
+            </Pressable>
+          </View>
+        }
+        
+      </View>
+      {isGridVisible && 
+        <View className="w-20 h-full rounded-2xl justify-center items-center">
+          <Pressable className="w-10 h-10 bg-blues rounded-lg justify-center items-center">
+            <Icon name="plus" type="entypo" color="#ffff" size={28} />
+          </Pressable>
+        </View>
+      }
+    </View>
   );
 
   return (
     <SafeAreaView flex={1}>
-      <Pressable onPress={closeMenu} className="w-full h-full pt-5">
+      <Pressable onPress={closeMenu} className="w-full h-full pt-5 items-stretch">
         <View className="w-full h-16 flex flex-row">
           <View className="w-1/5 flex justify-center items-center">
             <Pressable
