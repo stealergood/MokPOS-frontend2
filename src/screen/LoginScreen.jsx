@@ -41,8 +41,9 @@ const LoginScreen = ({ navigation }) => {
     fetchLogin(email, password)
       .then((data) => {
         setLoading(false);
-        signIn(data.data.accessToken);
+        signIn(data.data.accessToken, data.data.user_id);
       });
+    navigation.navigate("AddCategory");
   }
 
   return (

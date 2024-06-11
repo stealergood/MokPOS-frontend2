@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+  const [userID, setUserID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -24,10 +25,12 @@ export const AuthProvider = ({ children }) => {
     loadToken();
   }, []);
 
-  const signIn = async (newToken) => {
+  const signIn = async (newToken, userID) => {
     try {
       await AsyncStorage.setItem('token', newToken);
+      await AsyncStorage.setItem('user_id', userID);
       setToken(newToken);
+      setUserID(userID);
     } catch (error) {
       console.error('Failed to save token', error);
     }
