@@ -1,12 +1,16 @@
 import { View, Text, Pressable, TextInput } from "react-native";
 import { API_URL } from "../constant/Api";
 import { useAuth } from "../helpers/AuthContext";
+import { useDispatch } from "react-redux";
+import { setCategoryName, setCategoryId } from "../redux/slice/categorySlice";
 import { Icon } from "react-native-elements";
 import React, { useEffect, useState } from "react";
 
 const CategoryList = ({ navigation }) => {
   const { token, userID } = useAuth();
+  const [isEmpty, setIsEmpty] = useState(null);
   const [category, setCategory] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -20,13 +24,18 @@ const CategoryList = ({ navigation }) => {
         });
 
         const data = await response.json();
+        if (data.message == "No Category") {
+          setIsEmpty(true);
+        } else {
+          setIsEmpty(false);
+        }
         setCategory(data.data);
       } catch (error) {
-        console.log("Error:");
+        console.log("Error:", error);
       }
     };
     fetchCategory();
-  }, []);
+  });
 
   return (
     <View className="w-full h-ful pt-5 relative">
@@ -44,16 +53,34 @@ const CategoryList = ({ navigation }) => {
         </View>
       </View>
       <View className="w-full h-full">
-        {category.map((cat) => (
-          <View key={cat.category_id} className="w-full h-14 justify-center border-b border-[#BDBDBD] px-5">
-            <Text className="text-lg font-semibold">{cat.category_name}</Text>
+        {isEmpty ? (
+          <View className="w-full h-full items-center">
+            <Text className="text-lg mt-3">Category is Empty</Text>
           </View>
-        ))}
+        ) : (
+          <View className="w-full h-full">
+            {category.map((cat) => (
+              <Pressable
+                key={cat.category_id}
+                className="w-full h-14 justify-center border-b border-[#BDBDBD] px-5"
+                onPress={() => {
+                  dispatch(setCategoryName(cat.category_name));
+                  dispatch(setCategoryId(cat.category_id));
+                  navigation.navigate("UpdateCategory");
+                }}
+              >
+                <Text className="text-lg font-semibold">
+                  {cat.category_name}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
       </View>
       <View className="w-full bottom-20 absolute justify-center items-center">
-        <Pressable 
-        onPress={() => navigation.navigate("AddCategory")}
-        className="h-14 w-5/6 flex justify-center items-center bg-blues rounded px-5"
+        <Pressable
+          onPress={() => navigation.navigate("AddCategory")}
+          className="h-14 w-5/6 flex justify-center items-center bg-blues rounded px-5"
         >
           <Text className="text-white font-semibold text-lg">Add Category</Text>
         </Pressable>

@@ -89,11 +89,11 @@ const AddCategory = ({ navigation }) => {
           <Text>Category Name</Text>
           <TextInput
             className="w-full mt-2 h-14 bg-slate-200 rounded-2xl pl-5"
-            placeholder="Steak"
+            placeholder="Input Category Name"
             onChangeText={(text) => setCategoryName(text)}
             value={category_name}
           />
-          {alert && <Text className="text-red-500">{alertMesaaage}</Text>}
+          {alert && <Text className="text-red-600">{alertMesaaage}</Text>}
         </View>
       </View>
       <View className=" w-full h-fit absolute bottom-8 flex  justify-center items-center gap-2 ">
