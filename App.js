@@ -7,6 +7,7 @@ import LoginScreen from "./src/screen/LoginScreen";
 import Home from "./src/screen/Home";
 import Signup from "./src/screen/SignupScreen";
 import MainScreen from "./src/screen/MainScreen";
+import ManageScreen from "./src/screen/ManageScreen";
 import AddProduct from "./src/screen/AddProduct";
 import UpdateProduct from "./src/screen/UpdateProduct";
 import CategoryList from "./src/screen/CategoryList";
@@ -26,9 +27,10 @@ const AppNavigator = () => {
     <Stack.Navigator>
       {token ? (
         <>
+          <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="ManageScreen" component={ManageScreen} options={{ headerShown: false }} />
           <Stack.Screen name="AddCategory" component={AddCategory} options={{ headerShown: false }} />
           <Stack.Screen name="CategoryList" component={CategoryList} options={{ headerShown: false }} />
-          <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }} />
           <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} />
           <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} />
           <Stack.Screen name="UpdateCategory" component={UpdateCategory} options={{ headerShown: false }} />

@@ -1,30 +1,49 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Pressable,
-  Animated,
-  Image,
-  FlatList,
-} from "react-native";
+import { View, Text, SafeAreaView, Pressable, Animated, FlatList, Image} from "react-native";
 import { Icon } from "react-native-elements";
-import React, { useState, useRef } from "react";
 import { SearchBar } from "react-native-elements";
+import { API_URL } from "../constant/Api";
 import { useAuth } from "../helpers/AuthContext";
+import React, { useState, useRef, useEffect } from "react";
 
 const MainScreen = ({ navigation }) => {
-  const { signOut } = useAuth();
+  const { signOut, token, userID } = useAuth();
+  const [data, setData] = useState([]);
+  const [isEmpty, setIsEmpty] = useState(null);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isGridVisible, setIsGridVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState(false);
-  const slideAnim = useRef(new Animated.Value(-250)).current; // Initial position for the side menu
+  const slideAnim = useRef(new Animated.Value(-250)).current;
 
-  const data = [
-    { id: "1", name: "Avocado Coffe", price: 2.3 },
-    { id: "2", name: "Cappucino Coffe", price: 2.3 },
-    { id: "3", name: "Americano Coffe", price: 2 },
-    { id: "4", name: "Banana Coffe", price: 2.3 },
-  ];
+  // console.log("Data:", data[0].image);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`${API_URL}/product?user_id=${userID}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        if(data.message == "No Product Exist"){
+          setIsEmpty(true);
+          return;
+        }
+
+        setData(data.data);
+
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    }
+
+    fetchProduct();
+  }, []);
 
   const toggleGrid = () => {
     setIsGridVisible(!isGridVisible);
@@ -63,9 +82,11 @@ const MainScreen = ({ navigation }) => {
 
   const renderItem = ({ item }) => (
     <View className={`${isGridVisible ? "w-[95%] h-24 m-2 self-center flex flex-row" : "w-[45%] h-52 m-2 flex flex-col"} bg-white rounded-2xl`}>
-      <View className={`${isGridVisible ? "h-full w-32 bg-blue-300 rounded-2xl" : "w-full h-28 bg-blue-300 rounded-2xl"}`}></View>
+      <View className={`${isGridVisible ? "h-full w-32  rounded-2xl" : "w-full h-28 rounded-2x justify-center items-center p-2"}`}>
+      <Image source={require("../../assets/noImage.png")} style={{width: "100%", height: "100%"}} />
+      </View>
       <View className={`${isGridVisible ? "w-40 h-full rounded-2xl p-3" : "w-full h-16 rounded-2xl px-3 py-1"}`}>
-        <Text className="text-lg font-semibold text-wrap">{item.name}</Text>
+        <Text className="text-lg font-semibold text-wrap">{item.product_name}</Text>
         {isGridVisible ?
           <Text className="text-lg font-medium text-blues">${item.price}</Text>
         :
@@ -152,7 +173,7 @@ const MainScreen = ({ navigation }) => {
         <FlatList
           data={data}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.product_id}
           contentContainerStyle={{ paddingHorizontal: isGridVisible ? 2 : 0, paddingBottom: 5 }}
           numColumns={isGridVisible ? 1 : 2}
           columnWrapperStyle={!isGridVisible && { justifyContent: 'space-between' }}
@@ -177,41 +198,48 @@ const MainScreen = ({ navigation }) => {
                   My Store
                 </Text>
               </View>
-              <View className="px-4 py-7 gap-y-5">
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate("");
-                  }}
+              <View className="justify-between h-full px-4 py-7">
+                <View className="w-full h-64 gap-y-4">
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate("MainScreen");
+                    }}
+                    className="flex flex-row gap-x-2 items-center"
+                  >
+                    <Icon
+                      name="cash-register"
+                      type="material-community"
+                      color={"#ffff"}
+                      size={35}
+                    />
+                    <Text className="text-white text-lg font-semibold">
+                      Cashier
+                    </Text>
+                  </Pressable>
+                  <Pressable 
                   className="flex flex-row gap-x-2 items-center"
-                >
-                  <Icon
-                    name="cash-register"
-                    type="material-community"
-                    color={"#ffff"}
-                    size={35}
-                  />
-                  <Text className="text-white text-lg font-semibold">
-                    Cashier
-                  </Text>
-                </Pressable>
-                <Pressable className="flex flex-row gap-x-2 items-center">
-                  <Icon
-                    name="storefront-outline"
-                    type="ionicon"
-                    color={"#ffff"}
-                    size={33}
-                  />
-                  <Text className="text-white text-lg font-semibold">
-                    Manage Store
-                  </Text>
-                </Pressable>
+                  onPress={() => {
+                    navigation.navigate("ManageScreen");
+                  }}
+                  >
+                    <Icon
+                      name="storefront-outline"
+                      type="ionicon"
+                      color={"#ffff"}
+                      size={33}
+                    />
+                    <Text className="text-white text-lg font-semibold">
+                      Manage Store
+                    </Text>
+                  </Pressable>
+                </View>
                 <Pressable 
-                className="flex flex-row gap-x-2 items-center"
+                className="flex flex-row gap-x-2 items-center mb-20"
                 onPress={() => {signOut()}}
                 >
                   <Icon
-                    name="storefront-outline"
-                    type="ionicon"
+                    name="logout"
+                    type="simple-icon"
                     color={"#ffff"}
                     size={33}
                   />

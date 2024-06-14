@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from 'react-native'
 import React from 'react'
 
-const manage = () => {
+const ManageScreen = () => {
   return (
     <View className="w-full h-full bg-[#bdbdbd30]">
       <View className="w-full h-28 flex flex-row">
@@ -36,4 +36,4 @@ const manage = () => {
   )
 }
 
-export default manage
+export default ManageScreen
