@@ -1,18 +1,20 @@
-import { View, Text, SafeAreaView, Pressable, Animated, FlatList, Image} from "react-native";
+import { View, Text, SafeAreaView, Pressable, FlatList, Image} from "react-native";
 import { Icon } from "react-native-elements";
 import { SearchBar } from "react-native-elements";
 import { API_URL } from "../constant/Api";
 import { useAuth } from "../helpers/AuthContext";
-import React, { useState, useRef, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import SideMenu from "../component/sidenav/SideMenu";
+import { toggleMenu } from "../redux/slice/sideMenuSlice";
+import React, { useState, useEffect } from "react";
 
 const MainScreen = ({ navigation }) => {
-  const { signOut, token, userID } = useAuth();
+  const { token, userID } = useAuth();
   const [data, setData] = useState([]);
+  const dispatch = useDispatch();
   const [isEmpty, setIsEmpty] = useState(null);
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isGridVisible, setIsGridVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState(false);
-  const slideAnim = useRef(new Animated.Value(-250)).current;
 
   // console.log("Data:", data[0].image);
 
@@ -28,7 +30,7 @@ const MainScreen = ({ navigation }) => {
         });
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         if(data.message == "No Product Exist"){
           setIsEmpty(true);
@@ -53,36 +55,9 @@ const MainScreen = ({ navigation }) => {
     setSearchTerm(!searchTerm);
   };
 
-  const toggleMenu = () => {
-    if (isMenuVisible) {
-      closeMenu();
-    } else {
-      openMenu();
-    }
-  };
-
-  const openMenu = () => {
-    setIsMenuVisible(true);
-    Animated.timing(slideAnim, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const closeMenu = () => {
-    Animated.timing(slideAnim, {
-      toValue: -250,
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => {
-      setIsMenuVisible(false);
-    });
-  };
-
   const renderItem = ({ item }) => (
     <View className={`${isGridVisible ? "w-[95%] h-24 m-2 self-center flex flex-row" : "w-[45%] h-52 m-2 flex flex-col"} bg-white rounded-2xl`}>
-      <View className={`${isGridVisible ? "h-full w-32  rounded-2xl" : "w-full h-28 rounded-2x justify-center items-center p-2"}`}>
+      <View className={`${isGridVisible ? "h-full w-32  rounded-2xl p-2 " : "w-full h-28 rounded-2x justify-center items-center p-2"}`}>
       <Image source={require("../../assets/noImage.png")} style={{width: "100%", height: "100%"}} />
       </View>
       <View className={`${isGridVisible ? "w-40 h-full rounded-2xl p-3" : "w-full h-16 rounded-2xl px-3 py-1"}`}>
@@ -111,12 +86,15 @@ const MainScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView flex={1}>
-      <Pressable onPress={closeMenu} className="w-full h-full pt-5 items-stretch">
+      <Pressable 
+      className="w-full h-full pt-5 relative"
+      onPress={() => dispatch(toggleMenu(false))} 
+      >
         <View className="w-full h-16 flex flex-row">
           <View className="w-1/5 flex justify-center items-center">
             <Pressable
               className="h-10 w-10 rounded-lg flex justify-center items-center"
-              onPress={toggleMenu}
+              onPress={() => dispatch(toggleMenu(true))}
             >
               <Icon name="menu" type="feather" color="#1A72DD" size={30} />
             </Pressable>
@@ -170,6 +148,14 @@ const MainScreen = ({ navigation }) => {
           </View>
         )}
 
+        {isEmpty && (
+          <View className="w-full h-96 flex justify-center items-center">
+            <Text className="text-2xl text-slate-200 font-semibold">
+              No Product Exist
+            </Text>
+          </View>
+        )}
+
         <FlatList
           data={data}
           renderItem={renderItem}
@@ -180,78 +166,18 @@ const MainScreen = ({ navigation }) => {
           style={{ width: '100%', height: '100%', backgroundColor: '#D1D1D1', paddingTop: 5 }}
           key={isGridVisible ? 'grid' : 'list'}
         />
-      </Pressable>
 
-      {isMenuVisible && (
-        <View
-          className="pt-5"
-          style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
-        >
-          <View style={{ flex: 1 }}>
-            <Animated.View
-              style={{ transform: [{ translateX: slideAnim }] }}
-              className="absolute h-full w-64 bg-blues shadow-lg"
-            >
-              <View className="p-4 border-b border-gray-200">
-                <Image source={require("../../assets/MokPOS-w.png")} />
-                <Text className="font-semibold text-xl text-white">
-                  My Store
-                </Text>
-              </View>
-              <View className="justify-between h-full px-4 py-7">
-                <View className="w-full h-64 gap-y-4">
-                  <Pressable
-                    onPress={() => {
-                      navigation.navigate("MainScreen");
-                    }}
-                    className="flex flex-row gap-x-2 items-center"
-                  >
-                    <Icon
-                      name="cash-register"
-                      type="material-community"
-                      color={"#ffff"}
-                      size={35}
-                    />
-                    <Text className="text-white text-lg font-semibold">
-                      Cashier
-                    </Text>
-                  </Pressable>
-                  <Pressable 
-                  className="flex flex-row gap-x-2 items-center"
-                  onPress={() => {
-                    navigation.navigate("ManageScreen");
-                  }}
-                  >
-                    <Icon
-                      name="storefront-outline"
-                      type="ionicon"
-                      color={"#ffff"}
-                      size={33}
-                    />
-                    <Text className="text-white text-lg font-semibold">
-                      Manage Store
-                    </Text>
-                  </Pressable>
-                </View>
-                <Pressable 
-                className="flex flex-row gap-x-2 items-center mb-20"
-                onPress={() => {signOut()}}
-                >
-                  <Icon
-                    name="logout"
-                    type="simple-icon"
-                    color={"#ffff"}
-                    size={33}
-                  />
-                  <Text className="text-white text-lg font-semibold">
-                    Logout
-                  </Text>
-                </Pressable>
-              </View>
-            </Animated.View>
-          </View>
+        <View className="absolute bottom-5 w-full items-center">          
+          <Pressable className="w-5/6 h-14 items-center flex-row justify-between bg-blues rounded py-2 px-5">
+            <View className="flex-row">
+              <Icon name="cart-variant" type="material-community" color="#ffff" size={28} />
+              <Text className="text-white text-lg">items</Text>
+            </View>
+            <Text className="text-white text-lg">Total: $</Text>
+          </Pressable>
         </View>
-      )}
+      </Pressable>
+      <SideMenu navigation={navigation} />
     </SafeAreaView>
   );
 };

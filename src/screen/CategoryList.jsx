@@ -41,7 +41,10 @@ const CategoryList = ({ navigation }) => {
     <View className="w-full h-ful pt-5 relative">
       <View className="w-full h-16 flex flex-row border-b border-[#BDBDBD]">
         <View className="w-1/5 flex justify-center items-center">
-          <Pressable className=" h-10 w-10 rounded-lg flex justify-center items-center">
+          <Pressable 
+          className=" h-10 w-10 rounded-lg flex justify-center items-center"
+          onPress={() => navigation.navigate("ManageScreen")}
+          >
             <Icon name="chevron-left" color="#1A72DD" size={34} />
           </Pressable>
         </View>

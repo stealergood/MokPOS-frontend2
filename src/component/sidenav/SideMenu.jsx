@@ -4,16 +4,13 @@ import { View, Text, Pressable, Animated, Image } from "react-native";
 import { Icon } from "react-native-elements";
 import { useAuth } from "../../helpers/AuthContext";
 import { useSelector, useDispatch } from "react-redux";
+import { toggleMenu } from "../../redux/slice/sideMenuSlice";
 
 const SideMenu = ({ navigation }) => {
   const { signOut } = useAuth();
   const dispatch = useDispatch();
-  const isMenuVisible = useSelector((state) => state.menu.isMenuVisible);
+  const isMenuVisible = useSelector((state) => state.sideMenu.isMenuVisible);
   const slideAnim = useRef(new Animated.Value(-250)).current;
-
-  const toggleMenuHandler = () => {
-    dispatch(toggleMenu());
-  };
 
   const openMenu = () => {
     Animated.timing(slideAnim, {
@@ -33,7 +30,8 @@ const SideMenu = ({ navigation }) => {
 
   useEffect(() => {
     isMenuVisible ? openMenu() : closeMenu();
-  }, [isMenuVisible])
+  }, [isMenuVisible]);
+
 
   return (
     isMenuVisible && (
@@ -47,13 +45,14 @@ const SideMenu = ({ navigation }) => {
             className="absolute h-full w-64 bg-blues shadow-lg"
           >
             <View className="p-4 border-b border-gray-200">
-              <Image source={require("../../assets/MokPOS-w.png")} />
+              <Image source={require("../../../assets/MokPOS-w.png")} />
               <Text className="font-semibold text-xl text-white">My Store</Text>
             </View>
             <View className="justify-between h-full px-4 py-7">
               <View className="w-full h-64 gap-y-4">
                 <Pressable
                   onPress={() => {
+                    dispatch(toggleMenu(false));
                     navigation.navigate("MainScreen");
                   }}
                   className="flex flex-row gap-x-2 items-center"
@@ -71,6 +70,7 @@ const SideMenu = ({ navigation }) => {
                 <Pressable
                   className="flex flex-row gap-x-2 items-center"
                   onPress={() => {
+                    dispatch(toggleMenu(false));
                     navigation.navigate("ManageScreen");
                   }}
                 >

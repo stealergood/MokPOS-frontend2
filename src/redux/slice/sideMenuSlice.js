@@ -6,9 +6,9 @@ export const sideMenuSlice = createSlice({
         isMenuVisible: false,
     },
     reducers: {
-        toggleMenu: (state) => {
-            state.isMenuVisible = !state.isMenuVisible;
-        },
+        toggleMenu: (state, action) => {
+            state.isMenuVisible = action.payload;
+        }
     },
 })
 

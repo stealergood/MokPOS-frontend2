@@ -1,39 +1,68 @@
-import { View, Text, Pressable } from 'react-native'
-import React from 'react'
+import { View, Text, Pressable, SafeAreaView } from "react-native";
+import { Icon } from "react-native-elements";
+import { useDispatch } from "react-redux";
+import { toggleMenu } from "../redux/slice/sideMenuSlice";
+import SideMenu from "../component/sidenav/SideMenu";
+import React from "react";
 
-const ManageScreen = () => {
+const ManageScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   return (
-    <View className="w-full h-full bg-[#bdbdbd30]">
-      <View className="w-full h-28 flex flex-row">
-        <View className="h-full w-1/6 bg-white flex justify-center items-center">
-            <Text>B</Text>
-        </View>
-        <View className="h-full w-5/6 bg-white flex justify-center items-center">
-            <Text>Manage Store</Text>
-        </View>
-      </View>
-
-      <View className="w-full h-full ">
-        <View className="w-full h-40 p-6 space-y-4 ">
-            <Text className="text-[#2A3256] font-semibold text-lg">Set Product</Text>
-            <View className="space-y-3">
-                <View className="w-full flex flex-row justify-between border-b border-[#BDBDBD]">
-                    <Text className="text-[#2A3256]">Product</Text>
-                    <Pressable className="">
-                        <Text className="text-[#2A3256]">12 Items</Text>
-                    </Pressable>
-                </View>
-                <View className="w-full flex flex-row justify-between border-b border-[#BDBDBD]">
-                    <Text className="text-[#2A3256]">Category Product</Text>
-                    <Pressable>
-                        <Text className="text-[#2A3256]">0 Category</Text>
-                    </Pressable>
-                </View>
+    <SafeAreaView flex={1}>
+      <Pressable
+      className="w-full h-full pt-5 items-stretch"
+      onPress={() => dispatch(toggleMenu(false))}
+      >
+        <View className="w-full h-full bg-[#bdbdbd30]">
+          <View className="w-full h-16 flex flex-row">
+            <View className="w-1/5 flex justify-center items-center">
+              <Pressable
+                className="h-10 w-10 rounded-lg flex justify-center items-center"
+                onPress={() => dispatch(toggleMenu(true))}
+              >
+                <Icon name="menu" type="feather" color="#1A72DD" size={30} />
+              </Pressable>
             </View>
-        </View>
-      </View>
-    </View>
-  )
-}
+            <View className="w-4/5 flex justify-center items-center">
+              <Text className="mr-14 text-blue-600 font-semibold text-2xl">
+                Cashier
+              </Text>
+            </View>
+          </View>
 
-export default ManageScreen
+          <View className="w-full h-full ">
+            <View className="w-full h-40 p-6 space-y-4 ">
+              <Text className="text-[#2A3256] font-semibold text-lg">
+                Set Product
+              </Text>
+              <View className="space-y-3">
+                <Pressable 
+                className="w-full flex flex-row justify-between border-b border-[#BDBDBD]"
+                onPress={() => navigation.navigate("ProductList")}
+                >
+                  <Text className="text-[#2A3256]">Product</Text>
+                  <View className="">
+                    <Text className="text-[#2A3256]">12 Items</Text>
+                  </View>
+                </Pressable>
+                <Pressable 
+                className="w-full flex flex-row justify-between border-b border-[#BDBDBD]"
+                onPress={() => navigation.navigate("CategoryList")}
+                >
+                  <Text className="text-[#2A3256]">Category Product</Text>
+                  <View>
+                    <Text className="text-[#2A3256]">0 Category</Text>
+                  </View>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Pressable>
+      <SideMenu navigation={navigation} />
+    </SafeAreaView>
+  );
+};
+
+export default ManageScreen;
