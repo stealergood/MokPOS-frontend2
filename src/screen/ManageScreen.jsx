@@ -1,12 +1,14 @@
 import { View, Text, Pressable, SafeAreaView } from "react-native";
 import { Icon } from "react-native-elements";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../redux/slice/sideMenuSlice";
 import SideMenu from "../component/sidenav/SideMenu";
 import React from "react";
 
 const ManageScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const categories = useSelector((state) => state.category);
+  const products = useSelector((state) => state.product);
 
   return (
     <SafeAreaView flex={1}>
@@ -43,7 +45,7 @@ const ManageScreen = ({ navigation }) => {
                 >
                   <Text className="text-[#2A3256]">Product</Text>
                   <View className="">
-                    <Text className="text-[#2A3256]">12 Items</Text>
+                    <Text className="text-[#2A3256]">{products.length} Items</Text>
                   </View>
                 </Pressable>
                 <Pressable 
@@ -52,7 +54,7 @@ const ManageScreen = ({ navigation }) => {
                 >
                   <Text className="text-[#2A3256]">Category Product</Text>
                   <View>
-                    <Text className="text-[#2A3256]">0 Category</Text>
+                    <Text className="text-[#2A3256]">{categories.length} Category</Text>
                   </View>
                 </Pressable>
               </View>

@@ -1,22 +1,30 @@
-import {   Pressable, SafeAreaView, View, Text, FlatList } from 'react-native'
+import { Pressable, SafeAreaView, View, Text, FlatList } from 'react-native'
 import { Icon } from 'react-native-elements';
+import { useSelector } from 'react-redux';
 import React from 'react'
 import { SearchBar } from "react-native-elements";
 
 const ProductList = ({ navigation }) => {
-  const data = [
-    {id: 1, name: "Wagyu sate", price: 12, category: "All category"},
-    {id: 2, name: "Wagyu sate2", price: 13, category: "All branch"},
-  ]
+  const products = useSelector((state) => state.product);
+  const categories = useSelector((state) => state.category);
+
+  const getCategoryName = (category_id) => {
+    const category = categories.find((category) => category.category_id === category_id);
+    if (category) return category.category_name;
+    return "Category not found";
+  }
 
   const renderItem = ({ item }) => (
     <View className="w-full h-fit mt-5 flex flex-col items-center">
-      <Pressable className=" h-20 w-5/6 flex justify-center bg-white rounded-[20px] px-5 ">
+      <Pressable 
+        className=" h-20 w-5/6 flex justify-center bg-white rounded-[20px] px-5 "
+        onPress={() => navigation.navigate("UpdateProduct", { product_id: item.product_id })}
+      >
         <View className=" flex flex-row justify-between">
-          <Text className="font-bold text-base">{item.name}</Text>
-          <Text className="font-bold">${item.price}</Text>
+          <Text className="font-bold text-base">{item.product_name}</Text>
+          <Text className="font-bold">Rp.{item.price}</Text>
         </View>
-        <Text>{item.category}</Text>
+        <Text>{getCategoryName(item.category_id)}</Text>
       </Pressable>
     </View> 
   )
@@ -61,14 +69,17 @@ const ProductList = ({ navigation }) => {
 
       <View className="w-full h-full flex items-center bg-[#F6F7F9]">
         <FlatList
-          data={data}
+          data={products}
           renderItem={renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.product_id}
           style={{ width: "100%" }}
         />
       </View>
       <View className="w-full bottom-10 absolute items-center">
-        <Pressable className="h-14 w-5/6 flex justify-center items-center bg-[#0D62CA] rounded px-5">
+        <Pressable 
+        className="h-14 w-5/6 flex justify-center items-center bg-[#0D62CA] rounded px-5"
+        onPress={() => navigation.navigate("AddProduct")}
+        >
           <Text className="text-white">Add New product</Text>
         </Pressable>
       </View>

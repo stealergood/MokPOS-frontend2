@@ -1,8 +1,16 @@
-import { View, Text, Pressable, TextInput, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  TextInput,
+  ActivityIndicator,
+} from "react-native";
 import { Icon } from "react-native-elements";
 import { API_URL } from "../constant/Api";
 import React, { useState } from "react";
 import { useAuth } from "../helpers/AuthContext";
+import { useDispatch } from "react-redux";
+import { addCategory } from "../redux/slice/categorySlice";
 
 const fetchAddCategory = async (category_name, user_id, token) => {
   try {
@@ -10,7 +18,7 @@ const fetchAddCategory = async (category_name, user_id, token) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         user_id,
@@ -19,10 +27,11 @@ const fetchAddCategory = async (category_name, user_id, token) => {
     });
 
     const data = await response.json();
+    console.log(data);
     return data;
     // return response;
   } catch (error) {
-    console.log("Error:");
+    console.log("Error: ", error);
   }
 };
 
@@ -33,8 +42,9 @@ const AddCategory = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const { token, userID } = useAuth();
   const user_id = userID;
+  const dispatch = useDispatch();
 
-  const categoryHandler = async() => {
+  const categoryHandler = async () => {
     setLoading(true);
 
     if (category_name === "") {
@@ -58,10 +68,17 @@ const AddCategory = ({ navigation }) => {
         }
         setAlert(false);
         setLoading(false);
+        const payload = [
+          {
+            category_id: data.data.category_id,
+            category_name: data.data.category_name,
+          },
+        ];
+        dispatch(addCategory(payload));
         navigation.navigate("CategoryList");
       })
       .catch((error) => {
-        console.log(error);
+        console.log("error: ", error);
       });
   };
 
@@ -102,7 +119,11 @@ const AddCategory = ({ navigation }) => {
           onPress={categoryHandler}
           disabled={loading}
         >
-          {loading ? <ActivityIndicator color="#ffff" /> : <Text className="text-white">Add Category</Text>}
+          {loading ? (
+            <ActivityIndicator color="#ffff" />
+          ) : (
+            <Text className="text-white">Add Category</Text>
+          )}
         </Pressable>
       </View>
     </View>

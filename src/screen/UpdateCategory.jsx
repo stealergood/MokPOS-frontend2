@@ -1,14 +1,16 @@
 import { View, Text, Pressable, TextInput, ActivityIndicator } from "react-native";
 import { Icon } from "react-native-elements";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import React, { useState } from "react";
 import { API_URL } from "../constant/Api";
 import { useAuth } from "../helpers/AuthContext";
+import { updateCategory, deleteCategory } from "../redux/slice/categorySlice";
 
-const UpdateCategory = ({ navigation }) => {
+const UpdateCategory = ({ navigation, route }) => {
   const { token, userID } = useAuth();
-  const categoryId = useSelector((state) => state.category.category_id);
-  const [category_name, setCategory_name] = useState("");
+  const dispatch = useDispatch();
+  const { category_id } = route.params;
+  const [categoryName, setCategoryName] = useState("");
   const [alert, setAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,7 +18,7 @@ const UpdateCategory = ({ navigation }) => {
   const handleCategoryUpdate = () => {
     setLoading(true);
 
-    if (category_name === "") {
+    if (categoryName === "") {
       setAlertMessage("Category Name is required");
       setAlert(true);
       setLoading(false);
@@ -25,12 +27,10 @@ const UpdateCategory = ({ navigation }) => {
       setAlert(false);
     }
 
-    setCategory_name("");
-
     const payload = {
       user_id: userID,
-      category_id: categoryId,
-      category_name: category_name,
+      category_id: category_id,
+      category_name: categoryName,
     };
     
     fetch(`${API_URL}/category`, {
@@ -44,25 +44,25 @@ const UpdateCategory = ({ navigation }) => {
       .then((response) => response.json())
       .then((data) => {
         if (data.message === "Category already exists") {
-          setAlertMessage("Category already exist");
+          setAlertMessage("Category already exists");
           setAlert(true);
           setLoading(false);
           return;
         }
-
+        dispatch(updateCategory({ category_id: data.data.category_id, category_name: data.data.category_name }));
         setLoading(false);
-        // console.log(data);
         navigation.navigate("CategoryList");
       })
       .catch((error) => {
         console.log("Error:", error);
+        setLoading(false);
       });
   }
 
   const handleCategoryDelete = () => {
     const payload = {
       user_id: userID,
-      category_id: categoryId,
+      category_id: category_id,
     };
 
     fetch(`${API_URL}/category`, {
@@ -75,7 +75,7 @@ const UpdateCategory = ({ navigation }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
+        dispatch(deleteCategory({ category_id: category_id }));
         navigation.navigate("CategoryList");
       })
       .catch((error) => {
@@ -101,32 +101,32 @@ const UpdateCategory = ({ navigation }) => {
           </Text>
         </View>
       </View>
-      <View className=" w-full mt-7 flex justify-start px-5">
-        <Text className=" mr-16 font-semibold text-2xl">Detail Category</Text>
-        <View className=" mt-4">
+      <View className="w-full mt-7 flex justify-start px-5">
+        <Text className="mr-16 font-semibold text-2xl">Detail Category</Text>
+        <View className="mt-4">
           <Text>Category Name</Text>
           <TextInput
             className="w-full mt-2 h-14 bg-slate-200 rounded-2xl pl-5"
             placeholder="Input Category Name"
-            value={category_name}
-            onChangeText={(text) => setCategory_name(text)}
+            value={categoryName}
+            onChangeText={(text) => setCategoryName(text)}
           />
           {alert && <Text className="text-red-500">{alertMessage}</Text>}
         </View>
       </View>
-      <View className="w-full h-fit absolute bottom-5 justify-center items-center gap-2 ">
+      <View className="w-full h-fit absolute bottom-5 justify-center items-center gap-2">
         <Pressable 
-        className="h-14 w-5/6  mt-5 flex justify-center items-center bg-[#0D62CA] rounded px-5"
+        className="h-14 w-5/6 mt-5 flex justify-center items-center bg-[#0D62CA] rounded px-5"
         onPress={handleCategoryUpdate}
         >
           {loading ? <ActivityIndicator color="#fff" /> : <Text className="text-white font-semibold text-lg">Update Category</Text>}
         </Pressable>
         <Pressable 
-        className=" flex  flex-row justify-between items-center"
+        className="flex flex-row justify-between items-center"
         onPress={handleCategoryDelete}
         >
           <Icon name="trash" type="evilicon" color={"red"} />
-          <Text className=" text-red-500">Delete Category</Text>
+          <Text className="text-red-500">Delete Category</Text>
         </Pressable>
       </View>
     </View>
